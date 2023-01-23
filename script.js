@@ -12,7 +12,7 @@ form.addEventListener('submit', async function (event) {
     })
     .then((data) => {
       // console.log(data);
-      ordLink = data.features[0].attributes.ORDHYPERLINK;
+      ordLink = data.features[0].attributes.ORDHYPERLINK || 'No Data';
       Zstatus = data.features[0].attributes.STATUSTYPE;
       return { ordLink, Zstatus }
     })
@@ -28,6 +28,15 @@ form.addEventListener('submit', async function (event) {
       link.innerText = Zquery;
       link.setAttribute('href', ordLink);
       link.setAttribute('target', '_blank');
+      saveData();
+      break;
+    case 'Correction':
+      status.innerText = Zstatus;
+      status.style.color = 'blue';
+      link.innerText = Zquery;
+      link.setAttribute('href', ordLink);
+      link.setAttribute('target', '_blank');
+      saveData();
       break;
     case 'Denied':
       status.innerText = Zstatus;
@@ -35,13 +44,15 @@ form.addEventListener('submit', async function (event) {
       link.innerText = Zquery;
       link.setAttribute('href', ordLink);
       link.setAttribute('target', '_blank');
+      saveData();
       break;
-    case 'Withdrawn':
+    case 'Filed':
       status.innerText = Zstatus;
       status.style.color = 'purple';
       link.innerText = Zquery;
       link.setAttribute('href', ordLink);
       link.setAttribute('target', '_blank');
+      saveData();
       break;
     case 'Pending':
       status.innerText = Zstatus;
@@ -49,6 +60,15 @@ form.addEventListener('submit', async function (event) {
       link.innerText = Zquery;
       link.setAttribute('href', ordLink);
       link.setAttribute('target', '_blank');
+      saveData();
+      break;
+    case 'Reserved':
+      status.innerText = Zstatus;
+      status.style.color = 'brown';
+      link.innerText = Zquery;
+      link.setAttribute('href', ordLink);
+      link.setAttribute('target', '_blank');
+      saveData();
       break;
     default:
       status.innerText = 'No Data';
@@ -60,3 +80,17 @@ form.addEventListener('submit', async function (event) {
   // clear form
   form.reset();
 });
+
+function saveData() {
+  let Zquery = document.getElementById('Zquery').value;
+  let status = document.getElementById('status').innerText;
+  let link = ordLink;
+  let data = {
+    Zquery,
+    status,
+    link
+  };
+  let dataArray = [];
+  dataArray.push(data);
+  localStorage.setItem('data', JSON.stringify(dataArray));
+};
