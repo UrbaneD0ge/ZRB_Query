@@ -11,7 +11,7 @@
   <title>ZRB Query</title>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="">
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
@@ -19,15 +19,28 @@
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
   <form id="form">
-    <input type="text" id="Zquery" placeholder="Z-2_-___">
+    <input type="text" id="Zquery" placeholder="Z-2_-___" value="Z-23-">
     <input type="submit" id="submit" value="Submit">
   </form>
   <script src="script.js" async defer></script>
 
   <div>
-    <p id="status">-</p>
-    <a id="link">-</a>
+    <p>Status: <span id="status">-</span></p>
+    <p>Ordinance: <a id="link">-</a></p>
   </div>
+
+  <!-- <div>
+    <table>
+      <tr>
+        <th>Ordinance</th>
+        <th>Status</th>
+      </tr>
+      <tr>
+        <td>Z-2_-___</td>
+        <td>Approved</td>
+    </table>
+  </div> -->
+
 </body>
 
 </html>
