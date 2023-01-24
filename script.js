@@ -59,8 +59,8 @@ form.addEventListener('submit', async function (event) {
       status.innerText = Zstatus;
       status.style.color = 'orange';
       link.innerText = Zquery;
-      link.setAttribute('href', ordLink);
-      link.setAttribute('target', '_blank');
+      // link.setAttribute('href', ordLink);
+      // link.setAttribute('target', '_blank');
       saveData();
       break;
     case 'Reserved':
