@@ -6,6 +6,7 @@ form.addEventListener('submit', async function (event) {
   let status = document.getElementById('status');
   let link = document.getElementById('link');
   let Zstatus = '';
+  let ordLink = '';
   await fetch(`https://gis.atlantaga.gov/dpcd/rest/services/LandUsePlanning/LandUsePlanning/MapServer/10/query?where=DOCKET_NO%3D'${Zquery}'&outFields=ORDHYPERLINK,%20STATUSTYPE&returnGeometry=false&returnTrueCurves=false&returnIdsOnly=false&returnCountOnly=false&returnZ=false&returnM=false&returnDistinctValues=false&returnExtentOnly=false&f=pjson`)
     .then((response) => {
       return response.json();
@@ -71,7 +72,7 @@ form.addEventListener('submit', async function (event) {
       saveData();
       break;
     default:
-      status.innerText = 'No Data';
+      status.innerText = Zstatus || 'No Data';
       status.style.color = 'black';
       link.innerText = 'No Data';
       break;
