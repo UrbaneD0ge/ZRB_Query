@@ -15,9 +15,13 @@ form.addEventListener('submit', async function (event) {
     })
     .then((data) => {
       console.log(data.features[0].attributes);
-      ordLink = data.features[0].attributes.ORDHYPERLINK || 'No Data';
-      Zstatus = data.features[0].attributes.STATUSTYPE;
-      return { ordLink, Zstatus }
+      if (data.features[0].attributes.ORDHYPERLINK === null) {
+        ordLink = 'No Data';
+      } else {
+        ordLink = data.features[0].attributes.ORDHYPERLINK;
+        Zstatus = data.features[0].attributes.STATUSTYPE;
+        return { ordLink, Zstatus }
+      }
     })
     .catch((err) => {
       document.getElementById('status').innerText = 'No Data';
