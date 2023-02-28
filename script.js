@@ -15,13 +15,10 @@ form.addEventListener('submit', async function (event) {
     })
     .then((data) => {
       console.log(data.features[0].attributes);
-      if (data.features[0].attributes.ORDHYPERLINK === null) {
-        ordLink = 'No Data';
-      } else {
-        ordLink = data.features[0].attributes.ORDHYPERLINK;
-        Zstatus = data.features[0].attributes.STATUSTYPE;
-        return { ordLink, Zstatus }
-      }
+      if (data.features[0].attributes.ORDHYPERLINK)
+        ordLink = data.features[0].attributes.ORDHYPERLINK || 'No Data';
+      Zstatus = data.features[0].attributes.STATUSTYPE;
+      return { ordLink, Zstatus }
     })
     .catch((err) => {
       document.getElementById('status').innerText = 'No Data';
@@ -33,52 +30,36 @@ form.addEventListener('submit', async function (event) {
       status.innerText = Zstatus;
       status.style.color = 'green';
       decision.innerText = 'ZRB - Approval';
-      link.innerText = Zquery;
-      link.setAttribute('href', ordLink);
-      link.setAttribute('target', '_blank');
       copyDecision();
       // saveData();
       break;
     case 'Correction':
       status.innerText = Zstatus;
       status.style.color = 'blue';
-      link.innerText = Zquery;
-      link.setAttribute('href', ordLink);
-      link.setAttribute('target', '_blank');
       // saveData();
       break;
     case 'Denied':
       status.innerText = Zstatus;
       status.style.color = 'red';
       decision.innerText = 'ZRB - Denial';
-      link.innerText = Zquery;
-      link.setAttribute('href', ordLink);
-      link.setAttribute('target', '_blank');
       copyDecision();
       // saveData();
       break;
     case 'Filed':
       status.innerText = Zstatus;
       status.style.color = 'purple';
-      link.innerText = Zquery;
-      link.setAttribute('href', ordLink);
-      link.setAttribute('target', '_blank');
+
       // saveData();
       break;
     case 'Pending':
       status.innerText = Zstatus;
       status.style.color = 'orange';
-      link.innerText = Zquery;
-      // link.setAttribute('href', ordLink);
-      // link.setAttribute('target', '_blank');
+
       // saveData();
       break;
     case 'Reserved':
       status.innerText = Zstatus;
       status.style.color = 'brown';
-      link.innerText = Zquery;
-      link.setAttribute('href', ordLink);
-      link.setAttribute('target', '_blank');
       // saveData();
       break;
     default:
@@ -88,6 +69,14 @@ form.addEventListener('submit', async function (event) {
       break;
   }
 
+  if (ordLink) {
+    link.innerText = Zquery;
+    link.setAttribute('href', ordLink);
+    link.setAttribute('target', '_blank');
+  } else {
+    link.innerText = 'No Data';
+    link.removeAttribute = 'href';
+  }
   // clear form
   form.reset();
 });
