@@ -86,6 +86,7 @@ form.addEventListener('submit', async function (event) {
     link.innerText = 'No Data';
     link.removeAttribute = 'href';
   }
+  saveData(Zquery, Zstatus, decision.innerText, ordLink);
   // clear form
   form.reset();
   // clear variables
@@ -94,21 +95,39 @@ form.addEventListener('submit', async function (event) {
   Zstatus = '';
 });
 
-// function saveData() {
-//   let Zquery = document.getElementById('Zquery').value;
-//   let status = document.getElementById('status').innerText;
-//   let link = ordLink;
-//   let data = {
-//     Zquery,
-//     status,
-//     link
-//   };
-//   let dataArray = [];
-//   dataArray.push(data);
-//   localStorage.setItem('data', JSON.stringify(dataArray));
-// };
+let table = document.getElementById('table');
+let tableData = JSON.parse(localStorage.getItem('tableData')) || [];
 
-// const ZqueryInput = document.getElementById("Zquery");
+function saveData(ordLink) {
+  let Zquery = document.getElementById('Zquery').value;
+  let status = document.getElementById('status').innerText;
+  let decision = document.getElementById('decision').innerText;
+  let link = ordLink;
+  let data = {
+    Zquery,
+    status,
+    decision,
+    link
+  };
+  tableData.push(data);
+  sessionStorage.setItem('tableData', JSON.stringify(tableData));
+  tableData.forEach((data) => {
+    let row = document.createElement('tr');
+    row.innerHTML = `
+      <td><a href='${data.link} target="_blank" rel="noreferrer">${data.Zquery}</a></td>
+      <td>${data.status}</td>
+      <td>${data.decision}</td>
+      <td>${data.link}</td>
+    `;
+    table.appendChild(row);
+    // renderTable();
+  });
+};
+
+// function renderTable() {
+//   let table = document.getElementById('table');
+//   });
+// }
 
 // ZqueryInput.oninput = (e) => {
 //   e.target.value = formatZquery(e.target.value);
@@ -139,4 +158,4 @@ function copyDecision() {
   navigator.clipboard.writeText(decision.innerText);
   window.getSelection().removeAllRanges();
   console.log(`${Zquery.value}: '${decision.innerText}' copied to clipboard`);
-}
+};
