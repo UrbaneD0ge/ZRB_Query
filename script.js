@@ -14,14 +14,14 @@ form.addEventListener('submit', async function (event) {
       return response.json();
     })
     .then((data) => {
-      console.log(data.features[0].attributes);
+      console.log(data.features[0].attributes || 'No Data');
       if (data.features[0].attributes.ORDHYPERLINK)
         ordLink = data.features[0].attributes.ORDHYPERLINK || 'No Data';
       Zstatus = data.features[0].attributes.STATUSTYPE;
       return { ordLink, Zstatus }
     })
     .catch((err) => {
-      document.getElementById('status').innerText = 'No Data';
+      document.getElementById('status').innerText = 'Could not Fetch';
       console.log(err);
     });
 
