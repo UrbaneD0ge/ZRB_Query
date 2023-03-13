@@ -2,5 +2,10 @@
   "cSpell.words": [
     "Zquery",
     "Zstatus"
-  ]
+  ],
+  "workbench.colorCustomizations": {
+    "activityBar.background": "#54005E",
+    "titleBar.activeBackground": "#750084",
+    "titleBar.activeForeground": "#FEFAFF"
+  }
 }

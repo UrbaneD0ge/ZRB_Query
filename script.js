@@ -36,7 +36,7 @@ form.addEventListener('submit', async function (event) {
     case 'Correction':
       status.innerText = Zstatus;
       status.style.color = 'blue';
-      // saveData();
+      decision.innerText = '-';
       break;
     case 'Denied':
       status.innerText = Zstatus;
@@ -48,28 +48,30 @@ form.addEventListener('submit', async function (event) {
     case 'Filed':
       status.innerText = Zstatus;
       status.style.color = 'purple';
-
+      decision.innerText = '-';
       // saveData();
       break;
     case 'Pending':
       status.innerText = Zstatus;
       status.style.color = 'orange';
+      decision.innerText = '-';
 
       // saveData();
       break;
     case 'Reserved':
       status.innerText = Zstatus;
       status.style.color = 'brown';
-      // saveData();
+      decision.innerText = '-';
       break;
     default:
       status.innerText = Zstatus || 'No Data';
       status.style.color = 'black';
       link.innerText = 'No Data';
+      decision.innerText = '-';
       break;
   }
 
-  if (ordLink) {
+  if (ordLink !== 'No Data') {
     link.innerText = Zquery;
     link.setAttribute('href', ordLink);
     link.setAttribute('target', '_blank');
@@ -79,6 +81,10 @@ form.addEventListener('submit', async function (event) {
   }
   // clear form
   form.reset();
+  // clear variables
+  Zquery = '';
+  ordLink = '';
+  Zstatus = '';
 });
 
 // function saveData() {
@@ -125,5 +131,5 @@ function copyDecision() {
   window.getSelection().addRange(range);
   navigator.clipboard.writeText(decision.innerText);
   window.getSelection().removeAllRanges();
-  console.log(`'${decision.innerText}' copied to clipboard`);
+  console.log(`${Zquery.value}: '${decision.innerText}' copied to clipboard`);
 }
