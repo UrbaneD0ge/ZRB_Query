@@ -1,6 +1,5 @@
 form.addEventListener('submit', async function (event) {
   event.preventDefault();
-
   // const form = document.getElementById('form');
   let Zquery = document.getElementById('Zquery').value;
   let status = document.getElementById('status');
@@ -8,13 +7,19 @@ form.addEventListener('submit', async function (event) {
   let link = document.getElementById('link');
   let Zstatus = '';
   let ordLink = '';
+  status.innerText = 'Fetching...'
   // let decisionSpace = '';
   await fetch(`https://gis.atlantaga.gov/dpcd/rest/services/LandUsePlanning/LandUsePlanning/MapServer/10/query?where=DOCKET_NO%3D'${Zquery}'&outFields=ORDHYPERLINK,%20STATUSTYPE&returnGeometry=false&returnTrueCurves=false&returnIdsOnly=false&returnCountOnly=false&returnZ=false&returnM=false&returnDistinctValues=false&returnExtentOnly=false&f=pjson`)
+
     .then((response) => {
       return response.json();
     })
     .then((data) => {
-      console.log(data.features[0].attributes || 'No Data');
+      if (data.features[0] === undefined) {
+        document.getElementById('status').innerText = 'No Data';
+        return;
+      }
+      console.log(data.features[0].attributes);
       if (data.features[0].attributes.ORDHYPERLINK)
         ordLink = data.features[0].attributes.ORDHYPERLINK || 'No Data';
       Zstatus = data.features[0].attributes.STATUSTYPE;
@@ -48,7 +53,8 @@ form.addEventListener('submit', async function (event) {
     case 'Filed':
       status.innerText = Zstatus;
       status.style.color = 'purple';
-      decision.innerText = '-';
+      decision.innerText = 'Filed';
+      copyDecision();
       // saveData();
       break;
     case 'Pending':
@@ -61,7 +67,8 @@ form.addEventListener('submit', async function (event) {
     case 'Reserved':
       status.innerText = Zstatus;
       status.style.color = 'brown';
-      decision.innerText = '-';
+      decision.innerText = 'Reserved';
+      copyDecision();
       break;
     default:
       status.innerText = Zstatus || 'No Data';
