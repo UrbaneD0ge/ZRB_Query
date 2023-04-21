@@ -4,8 +4,8 @@
     "Zstatus"
   ],
   "workbench.colorCustomizations": {
-    "activityBar.background": "#53182A",
-    "titleBar.activeBackground": "#74213B",
-    "titleBar.activeForeground": "#FEFBFC"
+    "activityBar.background": "#54005E",
+    "titleBar.activeBackground": "#750084",
+    "titleBar.activeForeground": "#FEFAFF"
   }
 }
