@@ -1,3 +1,20 @@
+// document.getElementById('Zquery').addEventListener('input', function (e) {
+//   e.target.value = transformInput(e.target.value);
+// });
+
+// function transformInput(input) {
+//   const regex = /(^[Z]{1})\-([\d]{2})\-([\d]{1,3})$/g;
+//   const match = input.match(regex);
+
+//   if (match) {
+//     console.log(match[1].toUpperCase() + "-" + match[2] + "-" + match[3]);
+//     return match[1].toUpperCase() + "-" + match[2] + "-" + match[3];
+//   } else {
+//     console.log('No match found')
+//     return null;
+//   }
+// }
+
 form.addEventListener('submit', async function (event) {
   event.preventDefault();
   // const form = document.getElementById('form');
@@ -7,6 +24,7 @@ form.addEventListener('submit', async function (event) {
   let link = document.getElementById('link');
   let Zstatus = '';
   let ordLink = '';
+  // Zquery = transformInput(Zquery);
   status.innerText = 'Fetching...'
   // let decisionSpace = '';
   await fetch(`https://gis.atlantaga.gov/dpcd/rest/services/LandUsePlanning/LandUsePlanning/MapServer/10/query?where=DOCKET_NO%3D'${Zquery}'&outFields=ORDHYPERLINK,%20STATUSTYPE&returnGeometry=false&returnTrueCurves=false&returnIdsOnly=false&returnCountOnly=false&returnZ=false&returnM=false&returnDistinctValues=false&returnExtentOnly=false&f=pjson`)
@@ -86,6 +104,7 @@ form.addEventListener('submit', async function (event) {
     link.innerText = 'No Data';
     link.removeAttribute = 'href';
   }
+
   saveData(Zquery, Zstatus, decision.innerText, ordLink);
   // clear form
   form.reset();
@@ -111,15 +130,17 @@ function saveData(ordLink) {
   };
   tableData.push(data);
   sessionStorage.setItem('tableData', JSON.stringify(tableData));
+  // console.log('tableData:' + JSON.parse(tableData));
+  // console.log('data:' + data);
   tableData.forEach((data) => {
     let row = document.createElement('tr');
+    table.appendChild(row);
     row.innerHTML = `
       <td><a href='${data.link} target="_blank" rel="noreferrer">${data.Zquery}</a></td>
       <td>${data.status}</td>
       <td>${data.decision}</td>
       <td>${data.link}</td>
     `;
-    table.appendChild(row);
     // renderTable();
   });
 };
