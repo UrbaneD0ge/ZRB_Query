@@ -1,19 +1,61 @@
-// document.getElementById('Zquery').addEventListener('input', function (e) {
-//   e.target.value = transformInput(e.target.value);
-// });
+const Zquery = document.getElementById("Zquery");
 
-// function transformInput(input) {
-//   const regex = /(^[Z]{1})\-([\d]{2})\-([\d]{1,3})$/g;
-//   const match = input.match(regex);
+Zquery.oninput = (e) => {
+  e.target.value = patternMatch({
+    input: e.target.value,
+    template: "Z-xx-xxx",
+  });
+};
 
-//   if (match) {
-//     console.log(match[1].toUpperCase() + "-" + match[2] + "-" + match[3]);
-//     return match[1].toUpperCase() + "-" + match[2] + "-" + match[3];
-//   } else {
-//     console.log('No match found')
-//     return null;
-//   }
-// }
+function patternMatch({
+  input,
+  template
+}) {
+  try {
+
+
+    let j = 0;
+    let plaintext = "";
+    let countj = 0;
+    while (j < template.length) {
+      // code block to be
+
+      if (countj > input.length - 1) {
+        template = template.substring(0, j);
+        break;
+      }
+
+      if (template[j] == input[j]) {
+        j++;
+        countj++;
+        continue;
+      }
+
+      if (template[j] == "x") {
+        template = template.substring(0, j) + input[countj] + template.substring(j + 1);
+        plaintext = plaintext + input[countj];
+        countj++;
+      }
+      j++;
+    }
+
+    return template
+
+  } catch {
+    return ""
+  }
+};
+
+function zMatch() {
+  let Zquery = document.getElementById('Zquery').value;
+  zGroup = Zquery.match(/^([Z]{1})\-([\d]{2})\-([\d]{1,3})$/)
+  let zPadded = [
+    zGroup[1],
+    zGroup[2],
+    zGroup[3].padStart(3, '0')].join('-');
+  console.log(zPadded);
+  return zPadded;
+};
 
 form.addEventListener('submit', async function (event) {
   event.preventDefault();
@@ -24,10 +66,10 @@ form.addEventListener('submit', async function (event) {
   let link = document.getElementById('link');
   let Zstatus = '';
   let ordLink = '';
-  // Zquery = transformInput(Zquery);
-  status.innerText = 'Fetching...'
+  let zPadded = zMatch(Zquery);
+  status.innerText = `Fetching ${zPadded}`;
   // let decisionSpace = '';
-  await fetch(`https://gis.atlantaga.gov/dpcd/rest/services/LandUsePlanning/LandUsePlanning/MapServer/10/query?where=DOCKET_NO%3D'${Zquery}'&outFields=ORDHYPERLINK,%20STATUSTYPE&returnGeometry=false&returnTrueCurves=false&returnIdsOnly=false&returnCountOnly=false&returnZ=false&returnM=false&returnDistinctValues=false&returnExtentOnly=false&f=pjson`)
+  await fetch(`https://gis.atlantaga.gov/dpcd/rest/services/LandUsePlanning/LandUsePlanning/MapServer/10/query?where=DOCKET_NO%3D'${zPadded}'&outFields=ORDHYPERLINK,%20STATUSTYPE&returnGeometry=false&returnTrueCurves=false&returnIdsOnly=false&returnCountOnly=false&returnZ=false&returnM=false&returnDistinctValues=false&returnExtentOnly=false&f=pjson`)
 
     .then((response) => {
       return response.json();
@@ -97,7 +139,7 @@ form.addEventListener('submit', async function (event) {
   }
 
   if (ordLink !== 'No Data') {
-    link.innerText = Zquery;
+    link.innerText = zPadded;
     link.setAttribute('href', ordLink);
     link.setAttribute('target', '_blank');
   } else {
@@ -105,7 +147,7 @@ form.addEventListener('submit', async function (event) {
     link.removeAttribute = 'href';
   }
 
-  saveData(Zquery, Zstatus, decision.innerText, ordLink);
+  saveData(zPadded, Zstatus, decision.innerText, ordLink);
   // clear form
   form.reset();
   // clear variables
@@ -130,13 +172,11 @@ function saveData(ordLink) {
   };
   tableData.push(data);
   sessionStorage.setItem('tableData', JSON.stringify(tableData));
-  // console.log('tableData:' + JSON.parse(tableData));
-  // console.log('data:' + data);
   tableData.forEach((data) => {
     let row = document.createElement('tr');
     table.appendChild(row);
     row.innerHTML = `
-      <td><a href='${data.link} target="_blank" rel="noreferrer">${data.Zquery}</a></td>
+      <td><a href='${data.link} target="_blank" rel="noreferrer">${data.zPadded}</a></td>
       <td>${data.status}</td>
       <td>${data.decision}</td>
       <td>${data.link}</td>
@@ -144,30 +184,6 @@ function saveData(ordLink) {
     // renderTable();
   });
 };
-
-// function renderTable() {
-//   let table = document.getElementById('table');
-//   });
-// }
-
-// ZqueryInput.oninput = (e) => {
-//   e.target.value = formatZquery(e.target.value);
-//   console.log('Input is inputting...')
-// };
-
-// //  format the Zquery input
-// function formatZquery(zQueryString) {
-//   try {
-//     var match = zQueryString.match(/(^[vz]{1})\-([\d]{2})\-([\d]{1,3})$/gi);
-//     return [
-//       match[0].slice(0, 1).toUpperCase(),
-//       match[1].slice(1, 3),
-//       match[2].slice(4, 7)
-//     ].join("-");
-//   } catch (err) {
-//     console.log(err);
-//   }
-// }
 
 // copy decision to clipboard
 function copyDecision() {
@@ -178,5 +194,5 @@ function copyDecision() {
   window.getSelection().addRange(range);
   navigator.clipboard.writeText(decision.innerText);
   window.getSelection().removeAllRanges();
-  console.log(`${Zquery.value}: '${decision.innerText}' copied to clipboard`);
+  console.log(`${Zquery}: '${decision.innerText}' copied to clipboard`);
 };
