@@ -172,6 +172,7 @@ function saveData(ordLink) {
   };
   tableData.push(data);
   sessionStorage.setItem('tableData', JSON.stringify(tableData));
+  // TODO - add to table on submit
   tableData.forEach((data) => {
     let row = document.createElement('tr');
     table.appendChild(row);
